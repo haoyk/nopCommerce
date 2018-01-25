@@ -31,8 +31,10 @@ using Nop.Services.Events;
 using Nop.Services.ExportImport;
 using Nop.Services.Forums;
 using Nop.Services.Helpers;
+using Nop.Services.Http;
 using Nop.Services.Infrastructure;
 using Nop.Services.Installation;
+using Nop.Services.JD;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Media;
@@ -359,6 +361,8 @@ namespace Nop.Web.Framework
             builder.RegisterType<EventPublisher>().As<IEventPublisher>().SingleInstance();
             builder.RegisterType<SubscriptionService>().As<ISubscriptionService>().SingleInstance();
 
+            builder.RegisterType<JDService>().As<IJDService>().SingleInstance();
+            builder.RegisterType<HttpService>().As<IHttpService>().SingleInstance();
         }
 
         /// <summary>

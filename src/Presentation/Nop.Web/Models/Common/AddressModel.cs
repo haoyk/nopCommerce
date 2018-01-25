@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Web.Mvc;
 using FluentValidation.Attributes;
 using Nop.Web.Framework;
@@ -90,5 +91,39 @@ namespace Nop.Web.Models.Common
 
         public string FormattedCustomAddressAttributes { get; set; }
         public IList<AddressAttributeModel> CustomAddressAttributes { get; set; }
+
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        [DisplayName("省")]
+        public int JDAddrLevel1 { get; set; }
+
+        public string JDAddrLevel1Name { get; set; }
+
+        /// <summary>
+        /// 京东二级地址
+        /// </summary>
+        [DisplayName("市")]
+        public int JDAddrLevel2 { get; set; }
+
+        public string JDAddrLevel2Name { get; set; }
+
+        /// <summary>
+        /// 京东三级地址
+        /// </summary>
+        [DisplayName("区/县")]
+        public int JDAddrLevel3 { get; set; }
+
+        
+        public string JDAddrLevel3Name { get; set; }
+
+        /// <summary>
+        /// 京东四级地址
+        /// </summary>
+        [DisplayName("街道/镇")]
+        [AllowHtml]
+        public int JDAddrLevel4 { get; set; }
+
+        public string JDAddrLevel4Name { get; set; }
     }
 }

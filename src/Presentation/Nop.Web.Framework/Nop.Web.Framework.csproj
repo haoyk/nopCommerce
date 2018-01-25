@@ -149,6 +149,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BasePluginController.cs" />
     <Compile Include="Controllers\ParameterBasedOnFormNameAndValueAttribute.cs" />
+    <Compile Include="HttpPost.cs" />
     <Compile Include="Kendoui\DataSourceRequest.cs" />
     <Compile Include="Kendoui\DataSourceResult.cs" />
     <Compile Include="Kendoui\Sort.cs" />

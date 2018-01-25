@@ -85,6 +85,45 @@ namespace Nop.Core.Domain.Common
         /// </summary>
         public virtual StateProvince StateProvince { get; set; }
 
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        public int JDAddrLevel1 { get; set; }
+
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        public string JDAddrLevel1Name { get; set; }
+
+        /// <summary>
+        /// 京东二级地址
+        /// </summary>
+        public int JDAddrLevel2 { get; set; }
+
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        public string JDAddrLevel2Name { get; set; }
+
+        /// <summary>
+        /// 京东三级地址
+        /// </summary>
+        public int JDAddrLevel3 { get; set; }
+
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        public string JDAddrLevel3Name { get; set; }
+
+        /// <summary>
+        /// 京东四级地址
+        /// </summary>
+        public int JDAddrLevel4 { get; set; }
+
+        /// <summary>
+        /// 京东一级地址
+        /// </summary>
+        public string JDAddrLevel4Name { get; set; }
 
         public object Clone()
         {
@@ -106,6 +145,14 @@ namespace Nop.Core.Domain.Common
                 FaxNumber = this.FaxNumber,
                 CustomAttributes = this.CustomAttributes,
                 CreatedOnUtc = this.CreatedOnUtc,
+                JDAddrLevel1 = this.JDAddrLevel1,
+                JDAddrLevel2 = this.JDAddrLevel2,
+                JDAddrLevel3 = this.JDAddrLevel3,
+                JDAddrLevel4 = this.JDAddrLevel4,
+                JDAddrLevel1Name = this.JDAddrLevel1Name,
+                JDAddrLevel2Name = this.JDAddrLevel2Name,
+                JDAddrLevel3Name = this.JDAddrLevel3Name,
+                JDAddrLevel4Name = this.JDAddrLevel4Name
             };
             return addr;
         }

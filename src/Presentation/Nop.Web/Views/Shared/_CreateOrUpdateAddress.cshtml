@@ -33,21 +33,21 @@
 @Html.HiddenFor(model => model.Id)
 <div class="edit-address">
     <div class="inputs">
-        @Html.LabelFor(model => model.FirstName, new { }, ":")
-            @Html.EditorFor(model => model.FirstName)
-        @Html.RequiredHint()
-        @Html.ValidationMessageFor(model => model.FirstName)
-    </div>
-    <div class="inputs">
         @Html.LabelFor(model => model.LastName, new { }, ":")
-            @Html.EditorFor(model => model.LastName)
+        @Html.EditorFor(model => model.LastName)
         @Html.RequiredHint()
         @Html.ValidationMessageFor(model => model.LastName)
 
     </div>
     <div class="inputs">
+        @Html.LabelFor(model => model.FirstName, new { }, ":")
+        @Html.EditorFor(model => model.FirstName)
+        @Html.RequiredHint()
+        @Html.ValidationMessageFor(model => model.FirstName)
+    </div>
+    <div class="inputs">
         @Html.LabelFor(model => model.Email, new { }, ":")
-            @Html.EditorFor(model => model.Email)
+        @Html.EditorFor(model => model.Email)
         @Html.RequiredHint()
         @Html.ValidationMessageFor(model => model.Email)
     </div>
@@ -55,7 +55,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.Company, new { }, ":")
-                @Html.EditorFor(model => model.Company)
+            @Html.EditorFor(model => model.Company)
             @if (Model.CompanyRequired)
             {
                 @Html.RequiredHint()
@@ -67,7 +67,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.CountryId, new { }, ":")
-                @Html.DropDownListFor(model => model.CountryId, Model.AvailableCountries)
+            @Html.DropDownListFor(model => model.CountryId, Model.AvailableCountries)
             @Html.RequiredHint()
             @Html.ValidationMessageFor(model => model.CountryId)
         </div>
@@ -77,7 +77,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.StateProvinceId, new { }, ":")
-                @Html.DropDownListFor(model => model.StateProvinceId, Model.AvailableStates)
+            @Html.DropDownListFor(model => model.StateProvinceId, Model.AvailableStates)
             <span id="states-loading-progress" style="display: none;" class="please-wait">@T("Common.Wait...")</span>
             @Html.ValidationMessageFor(model => model.StateProvinceId)
         </div>
@@ -86,7 +86,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.City, new { }, ":")
-                @Html.EditorFor(model => model.City)
+            @Html.EditorFor(model => model.City)
 
             @if (Model.CityRequired)
             {
@@ -95,11 +95,41 @@
             @Html.ValidationMessageFor(model => model.City)
         </div>
     }
+
+    <div class="inputs">
+        @Html.LabelFor(model => model.JDAddrLevel1, new { }, ":")
+        @Html.DropDownListFor(model => model.JDAddrLevel1, new List<SelectListItem>() { new SelectListItem() { Text = "请选择", Value = "" }, new SelectListItem() { Text = "河北", Value = "5" } })
+        @*@Html.RequiredHint()
+        @Html.ValidationMessageFor(model => model.JDAddrLevel1)
+        @Html.HiddenFor(model => model.JDAddrLevel1Name)*@
+    </div>
+    <div class="inputs">
+        @Html.LabelFor(model => model.JDAddrLevel2, new { }, ":")
+        @Html.DropDownListFor(model => model.JDAddrLevel2, new List<SelectListItem>() { new SelectListItem() { Text = "请选择", Value = "" }, new SelectListItem() { Text = "石家庄市", Value = "142" } })
+        @Html.RequiredHint()
+        @Html.ValidationMessageFor(model => model.JDAddrLevel2)
+        @Html.HiddenFor(model => model.JDAddrLevel2Name)
+    </div>
+    <div class="inputs">
+        @Html.LabelFor(model => model.JDAddrLevel3, new { }, ":")
+        @Html.DropDownListFor(model => model.JDAddrLevel3, new List<SelectListItem>() { new SelectListItem() { Text = "请选择", Value = "" }, new SelectListItem() { Text = "桥西区", Value = "42544" } })
+        @Html.RequiredHint()
+        @Html.ValidationMessageFor(model => model.JDAddrLevel3)
+        @Html.HiddenFor(model => model.JDAddrLevel3Name)
+    </div>
+    <div class="inputs">
+        @Html.LabelFor(model => model.JDAddrLevel4, new { }, ":")
+        @Html.DropDownListFor(model => model.JDAddrLevel3, new List<SelectListItem>() { new SelectListItem() { Text = "无", Value = "" } })
+        @Html.RequiredHint()
+        @Html.ValidationMessageFor(model => model.JDAddrLevel4)
+        @Html.HiddenFor(model => model.JDAddrLevel4Name)
+    </div>
+
     @if (Model.StreetAddressEnabled)
     {
         <div class="inputs">
             @Html.LabelFor(model => model.Address1, new { }, ":")
-                @Html.EditorFor(model => model.Address1)
+            @Html.EditorFor(model => model.Address1)
             @if (Model.StreetAddressRequired)
             {
                 @Html.RequiredHint()
@@ -111,7 +141,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.Address2, new { }, ":")
-                @Html.EditorFor(model => model.Address2)
+            @Html.EditorFor(model => model.Address2)
             @if (Model.StreetAddress2Required)
             {
                 @Html.RequiredHint()
@@ -123,7 +153,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.ZipPostalCode, new { }, ":")
-                @Html.EditorFor(model => model.ZipPostalCode)
+            @Html.EditorFor(model => model.ZipPostalCode)
             @if (Model.ZipPostalCodeRequired)
             {
                 @Html.RequiredHint()
@@ -135,7 +165,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.PhoneNumber, new { }, ":")
-                @Html.EditorFor(model => model.PhoneNumber)
+            @Html.EditorFor(model => model.PhoneNumber)
             @if (Model.PhoneRequired)
             {
                 @Html.RequiredHint()
@@ -147,7 +177,7 @@
     {
         <div class="inputs">
             @Html.LabelFor(model => model.FaxNumber, new { }, ":")
-                @Html.EditorFor(model => model.FaxNumber)
+            @Html.EditorFor(model => model.FaxNumber)
             @if (Model.FaxRequired)
             {
                 @Html.RequiredHint()

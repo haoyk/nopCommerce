@@ -83,6 +83,27 @@ namespace Nop.Web.Validators.Common
             {
                 RuleFor(x => x.FaxNumber).NotEmpty().WithMessage(localizationService.GetResource("Account.Fields.Fax.Required"));
             }
+
+            RuleFor(x => x.JDAddrLevel1)
+                .NotNull()
+                .WithMessage("请选择省");
+            RuleFor(x => x.JDAddrLevel1)
+                .NotEqual(0)
+                .WithMessage("请选择省");
+
+            RuleFor(x => x.JDAddrLevel2)
+                .NotNull()
+                .WithMessage("请选择市");
+            RuleFor(x => x.JDAddrLevel2)
+                .NotEqual(0)
+                .WithMessage("请选择市");
+
+            RuleFor(x => x.JDAddrLevel3)
+                .NotNull()
+                .WithMessage("请选择区/县");
+            RuleFor(x => x.JDAddrLevel3)
+                .NotEqual(0)
+                .WithMessage("请选择区/县");
         }
     }
 }

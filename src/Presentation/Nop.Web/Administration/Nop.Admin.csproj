@@ -29,6 +29,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -156,6 +157,7 @@
     <Compile Include="Controllers\BaseAdminController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\AddressAttributeController.cs" />
+    <Compile Include="Controllers\JDController.cs" />
     <Compile Include="Controllers\PreferencesController.cs" />
     <Compile Include="Controllers\CustomerAttributeController.cs" />
     <Compile Include="Controllers\CheckoutAttributeController.cs" />
@@ -2496,6 +2498,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Roxy_Fileman\tmp\" />
+    <Folder Include="Views\JD\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shipping\EditProductAvailabilityRange.cshtml" />

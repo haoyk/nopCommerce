@@ -60,6 +60,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Z.EntityFramework.Extensions, Version=3.14.5.0, Culture=neutral, PublicKeyToken=59b66d028979105b, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Z.EntityFramework.Extensions.3.14.5\lib\net45\Z.EntityFramework.Extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mapping\Catalog\PredefinedProductAttributeValueMap.cs" />
@@ -68,6 +71,13 @@
     <Compile Include="Mapping\Common\AddressAttributeValueMap.cs" />
     <Compile Include="Mapping\Customers\CustomerPasswordMap.cs" />
     <Compile Include="Mapping\Forums\ForumPostVoteMap.cs" />
+    <Compile Include="Mapping\JD\JDAddrMap.cs" />
+    <Compile Include="Mapping\JD\JDCategoryMap.cs" />
+    <Compile Include="Mapping\JD\JDClientInfoMap.cs" />
+    <Compile Include="Mapping\JD\JDClientInfos_PaymentCompanyMap.cs" />
+    <Compile Include="Mapping\JD\JDCommonJsonMap.cs" />
+    <Compile Include="Mapping\JD\JDSkuDetailMap.cs" />
+    <Compile Include="Mapping\JD\JDSkuImageMap.cs" />
     <Compile Include="Mapping\Orders\ReturnRequestReason.cs" />
     <Compile Include="Mapping\Orders\ReturnRequestAction.cs" />
     <Compile Include="Mapping\Shipping\ProductAvailabilityRangeMap.cs" />

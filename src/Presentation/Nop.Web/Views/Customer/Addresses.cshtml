@@ -57,6 +57,10 @@
                                 {
                                     <li class="company">@address.Company</li>
                                 }
+                                    <li class="jdaddress">
+                                        @address.JDAddrLevel1Name @address.JDAddrLevel2Name
+                                        @address.JDAddrLevel3Name @address.JDAddrLevel4Name
+                                    </li>
                                 @if (address.StreetAddressEnabled)
                                 {
                                     <li class="address1">

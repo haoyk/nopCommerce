@@ -156,7 +156,7 @@ namespace Nop.Core
                     result = _httpContext.Request.UserHostAddress;
                 }
             }
-            catch 
+            catch
             {
                 return result;
             }
@@ -196,7 +196,7 @@ namespace Nop.Core
         {
             if (!IsRequestAvailable(_httpContext))
                 return string.Empty;
-            
+
             //get the host considering using SSL
             var url = GetStoreHost(useSsl).TrimEnd('/');
 
@@ -213,28 +213,35 @@ namespace Nop.Core
         public virtual bool IsCurrentConnectionSecured()
         {
             bool useSsl = false;
-            if (IsRequestAvailable(_httpContext))
-            {
-                //when your hosting uses a load balancer on their server then the Request.IsSecureConnection is never got set to true
 
-                //1. use HTTP_CLUSTER_HTTPS?
-                if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Use_HTTP_CLUSTER_HTTPS"]) &&
-                   Convert.ToBoolean(ConfigurationManager.AppSettings["Use_HTTP_CLUSTER_HTTPS"]))
+            try
+            {
+                if (IsRequestAvailable(_httpContext))
                 {
-                    useSsl = ServerVariables("HTTP_CLUSTER_HTTPS") == "on";
-                }
-                //2. use HTTP_X_FORWARDED_PROTO?
-                else if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Use_HTTP_X_FORWARDED_PROTO"]) &&
-                   Convert.ToBoolean(ConfigurationManager.AppSettings["Use_HTTP_X_FORWARDED_PROTO"]))
-                {
-                    useSsl = string.Equals(ServerVariables("HTTP_X_FORWARDED_PROTO"), "https", StringComparison.OrdinalIgnoreCase);
-                }
-                else
-                {
-                    useSsl = _httpContext.Request.IsSecureConnection;
+                    //when your hosting uses a load balancer on their server then the Request.IsSecureConnection is never got set to true
+
+                    //1. use HTTP_CLUSTER_HTTPS?
+                    if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Use_HTTP_CLUSTER_HTTPS"]) &&
+                       Convert.ToBoolean(ConfigurationManager.AppSettings["Use_HTTP_CLUSTER_HTTPS"]))
+                    {
+                        useSsl = ServerVariables("HTTP_CLUSTER_HTTPS") == "on";
+                    }
+                    //2. use HTTP_X_FORWARDED_PROTO?
+                    else if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["Use_HTTP_X_FORWARDED_PROTO"]) &&
+                       Convert.ToBoolean(ConfigurationManager.AppSettings["Use_HTTP_X_FORWARDED_PROTO"]))
+                    {
+                        useSsl = string.Equals(ServerVariables("HTTP_X_FORWARDED_PROTO"), "https", StringComparison.OrdinalIgnoreCase);
+                    }
+                    else
+                    {
+                        useSsl = _httpContext.Request.IsSecureConnection;
+                    }
                 }
             }
+            catch (Exception e)
+            {
 
+            }
             return useSsl;
         }
 

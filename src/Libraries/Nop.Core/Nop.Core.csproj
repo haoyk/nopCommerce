@@ -64,6 +64,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO.Compression" />
@@ -129,6 +130,14 @@
     <Compile Include="Domain\Discounts\RequirementGroupInteractionType.cs" />
     <Compile Include="Domain\Directory\RoundingType.cs" />
     <Compile Include="Domain\Forums\ForumPostVote.cs" />
+    <Compile Include="Domain\JD\JDAddr.cs" />
+    <Compile Include="Domain\JD\JDCategory.cs" />
+    <Compile Include="Domain\JD\JDClientInfo.cs" />
+    <Compile Include="Domain\JD\JDClientInfos_PaymentCompany.cs" />
+    <Compile Include="Domain\JD\JDCommonJson.cs" />
+    <Compile Include="Domain\JD\JDCommonClientSetting.cs" />
+    <Compile Include="Domain\JD\JDSkuDetail.cs" />
+    <Compile Include="Domain\JD\JDSkuImage.cs" />
     <Compile Include="Domain\Messages\MessageDelayPeriod.cs" />
     <Compile Include="Domain\Messages\QueuedEmailPriority.cs" />
     <Compile Include="Domain\Messages\MessageTemplateSystemNames.cs" />
@@ -146,6 +155,7 @@
     <Compile Include="Domain\Vendors\VendorNote.cs" />
     <Compile Include="Domain\Vendors\VendorSettings.cs" />
     <Compile Include="Domain\Vendors\Vendor.cs" />
+    <Compile Include="JD\JDToken.cs" />
     <Compile Include="TypeConverterRegistrationStartUpTask.cs" />
     <Compile Include="Infrastructure\Mapper\AutoMapperConfiguration.cs" />
     <Compile Include="Infrastructure\Mapper\IMapperConfiguration.cs" />

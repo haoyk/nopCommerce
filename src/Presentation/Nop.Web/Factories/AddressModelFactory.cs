@@ -189,6 +189,14 @@ namespace Nop.Web.Factories
                 model.ZipPostalCode = address.ZipPostalCode;
                 model.PhoneNumber = address.PhoneNumber;
                 model.FaxNumber = address.FaxNumber;
+                model.JDAddrLevel1 = address.JDAddrLevel1;
+                model.JDAddrLevel2 = address.JDAddrLevel2;
+                model.JDAddrLevel3 = address.JDAddrLevel3;
+                model.JDAddrLevel4 = address.JDAddrLevel4;
+                model.JDAddrLevel1Name = address.JDAddrLevel1Name;
+                model.JDAddrLevel2Name = address.JDAddrLevel2Name;
+                model.JDAddrLevel3Name = address.JDAddrLevel3Name;
+                model.JDAddrLevel4Name = address.JDAddrLevel4Name;
             }
 
             if (address == null && prePopulateWithCustomerFields)

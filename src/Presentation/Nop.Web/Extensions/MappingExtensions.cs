@@ -55,6 +55,14 @@ namespace Nop.Web.Extensions
             destination.ZipPostalCode = model.ZipPostalCode;
             destination.PhoneNumber = model.PhoneNumber;
             destination.FaxNumber = model.FaxNumber;
+            destination.JDAddrLevel1 = model.JDAddrLevel1;
+            destination.JDAddrLevel2 = model.JDAddrLevel2;
+            destination.JDAddrLevel3 = model.JDAddrLevel3;
+            destination.JDAddrLevel4 = model.JDAddrLevel4;
+            destination.JDAddrLevel1Name = model.JDAddrLevel1Name;
+            destination.JDAddrLevel2Name = model.JDAddrLevel2Name;
+            destination.JDAddrLevel3Name = model.JDAddrLevel3Name;
+            destination.JDAddrLevel4Name = model.JDAddrLevel4Name;
 
             return destination;
         }

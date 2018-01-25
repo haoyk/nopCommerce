@@ -299,9 +299,10 @@ namespace Nop.Services.Localization
             }
             if (String.IsNullOrEmpty(result))
             {
-                if (logIfNotFound)
-                    _logger.Warning(string.Format("Resource string ({0}) is not found. Language ID = {1}", resourceKey, languageId));
-                
+                if (logIfNotFound) { 
+                    //_logger.Warning(string.Format("Resource string ({0}) is not found. Language ID = {1}", resourceKey, languageId));
+                }
+
                 if (!String.IsNullOrEmpty(defaultValue))
                 {
                     result = defaultValue;

@@ -20,5 +20,45 @@ namespace Nop.Core
         {
             return o == null ? failureValue : evaluator(o);
         }
+
+        #region MyRegion
+
+        public static bool IsNullOrEmpty(this string value)
+        {
+            return string.IsNullOrEmpty(value);
+        }
+
+        public static void TrueThrow(this bool value, string msg)
+        {
+            if (value == true)
+            {
+                throw new Exception(msg);
+            }
+        }
+
+        public static void FalseThrow(this bool value, string msg)
+        {
+            if (value == false)
+            {
+                throw new Exception(msg);
+            }
+        }
+
+        public static void NullOrEmptyCheck(this string value, string fieldName)
+        {
+            value.IsNullOrEmpty().TrueThrow(string.Format("字段{0}不能为空", fieldName));
+        }
+
+        public static void NullCheck(this object value, string fieldName)
+        {
+            (value == null).TrueThrow(string.Format("字段{0}不能为Null", fieldName));
+        }
+
+        public static bool IsMinValue(this DateTime value)
+        {
+            return DateTime.MinValue == value;
+        }
+
+        #endregion
     }
 }
