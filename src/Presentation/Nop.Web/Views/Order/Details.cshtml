@@ -212,9 +212,9 @@
                         <ul class="info-list">
                             @if (!Model.PickUpInStore)
                             {
-                                <li class="name">
-                                    @Model.ShippingAddress.FirstName @Model.ShippingAddress.LastName
-                                </li>
+                            <li class="name">
+                                @Model.ShippingAddress.LastName@Model.ShippingAddress.FirstName
+                            </li>
                                 <li class="email">
                                     @T("Order.Email"): @Model.ShippingAddress.Email
                                 </li>

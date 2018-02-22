@@ -1,5 +1,6 @@
 ﻿@model OrderModel
 
+@using Nop.Core
 @using Nop.Core.Domain.Tax;
 @using Nop.Core.Domain.Orders;
 @using Nop.Services
@@ -101,7 +102,7 @@
                                     @T("Admin.Orders.Fields.OrderStatus.Change")
                                 </button>
                                 <div id="pnlChangeOrderStatus" style="margin-top: 3px;">
-                                    @Html.NopDropDownListFor(model => model.OrderStatusId, ((OrderStatus) Model.OrderStatusId).ToSelectList())
+                                    @Html.NopDropDownListFor(model => model.OrderStatusId, ((OrderStatus)Model.OrderStatusId).ToSelectList())
                                     <button type="submit" name="btnSaveOrderStatus" id="btnSaveOrderStatus" class="btn btn-primary" style="margin-left: 3px">
                                         @T("Admin.Common.Save")
                                     </button>
@@ -110,7 +111,7 @@
                                         @T("Admin.Common.Cancel")
                                     </button>
                                     <div class="input-group-btn-hint">
-                                        <em>@T("Admin.Orders.Fields.OrderStatus.Change.ForAdvancedUsers")</em>
+                                        <em style="color:red">@T("Admin.Orders.Fields.OrderStatus.Change.ForAdvancedUsers")</em>
                                     </div>
                                 </div>
                             </div>
@@ -138,11 +139,25 @@
             <div class="form-group">
                 <div class="col-md-3">
                     @Html.NopLabelFor(model => model.CustomOrderNumber)
+
                 </div>
                 <div class="col-md-9">
                     @Html.NopDisplayFor(model => model.CustomOrderNumber)
                 </div>
-            </div>           
+            </div>
+            @*京东订单*@
+            @if (Model.JDOrderId.IsNullOrEmpty() == false)
+            {
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.JDOrderId)
+
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopDisplayFor(model => model.JDOrderId)
+                    </div>
+                </div>
+            }
             @if (!Model.IsLoggedInAsVendor)
             {
                 <div class="form-group">
@@ -167,8 +182,8 @@
 
     @if (!Model.IsLoggedInAsVendor)
     {
-    <div class="panel panel-default">
-        <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-body">
                 <div class="form-group">
                     <div class="col-md-3">
                         @Html.NopLabelFor(model => model.CustomerId)
@@ -705,8 +720,8 @@
                         @Html.NopDisplayFor(model => model.PaymentMethod)
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
     }
     <div class="panel panel-default">
         <div class="panel-body">

@@ -125,5 +125,10 @@ namespace Nop.Core.Domain.Orders
             get { return _associatedGiftCards ?? (_associatedGiftCards = new List<GiftCard>()); }
             protected set { _associatedGiftCards = value; }
         }
+
+        /// <summary>
+        /// ¾©¶«¶©µ¥±àÂë
+        /// </summary>
+        public string JdOrderId { get; set; }
     }
 }

@@ -1,0 +1,9 @@
+﻿Group: Payment methods
+FriendlyName: 臻顺溜支付
+SystemName: Payments.ZSL
+Version: 1.00
+SupportedVersions: 3.90
+Author: 拉萨盛航电子商务有限公司
+DisplayOrder: 0
+FileName: Nop.Plugin.Payments.ZSL.dll
+Description: 商城平台臻顺溜支付插件

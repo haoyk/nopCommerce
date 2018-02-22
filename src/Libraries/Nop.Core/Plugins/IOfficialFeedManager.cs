@@ -3,7 +3,7 @@
 namespace Nop.Core.Plugins
 {
     /// <summary>
-    /// Official feed manager (official plugins from www.nopCommerce.com site)
+    /// Official feed manager (official plugins from www.meilianyougou.com site)
     /// </summary>
     public interface IOfficialFeedManager
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nop.Core.Domain.Catalog;
+using Nop.Core.Domain.Orders;
 
 namespace Nop.Services.Payments
 {
@@ -104,5 +105,10 @@ namespace Nop.Services.Payments
         /// You can store any custom value in this property
         /// </summary>
         public Dictionary<string, object> CustomValues { get; set; }
+
+        /// <summary>
+        /// ¹ºÎï³µÏêÏ¸
+        /// </summary>
+        public ICollection<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

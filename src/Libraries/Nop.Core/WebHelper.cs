@@ -80,7 +80,7 @@ namespace Nop.Core
                 //find the new controller types and couldn't instantiate the requested controller. 
                 //That's why you get these nasty errors 
                 //i.e "Controller does not implement IController".
-                //The issue is described here: http://www.nopcommerce.com/boards/t/10969/nop-20-plugin.aspx?p=4#51318
+                //The issue is described here: http://www.meilianyougou.com/boards/t/10969/nop-20-plugin.aspx?p=4#51318
                 //The solution is to touch global.asax file
                 File.SetLastWriteTimeUtc(CommonHelper.MapPath("~/global.asax"), DateTime.UtcNow);
                 return true;
@@ -260,7 +260,7 @@ namespace Nop.Core
                     return result;
 
                 //put this method is try-catch 
-                //as described here http://www.nopcommerce.com/boards/t/21356/multi-store-roadmap-lets-discuss-update-done.aspx?p=6#90196
+                //as described here http://www.meilianyougou.com/boards/t/21356/multi-store-roadmap-lets-discuss-update-done.aspx?p=6#90196
                 if (_httpContext.Request.ServerVariables[name] != null)
                 {
                     result = _httpContext.Request.ServerVariables[name];

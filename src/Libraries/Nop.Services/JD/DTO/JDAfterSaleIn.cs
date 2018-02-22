@@ -34,7 +34,7 @@ namespace Nop.Services.JD.DTO
         /// 是否需要检测报告
         /// </summary>
         [JsonProperty(PropertyName = "isNeedDetectionReport")]
-        public bool IsNeedDetectionReport => false;
+        public int IsNeedDetectionReport => 0;
 
         /// <summary>
         /// 问题描述图片  String 最多2000字符
@@ -46,8 +46,11 @@ namespace Nop.Services.JD.DTO
         /// <summary>
         /// 是否有包装
         /// </summary>
-        [JsonProperty(PropertyName = "isHasPackage")]
+        [JsonIgnore]
         public bool IsHasPackage { get; set; }
+
+        [JsonProperty(PropertyName = "isHasPackage")]
+        public int IsHasPackage_Int => IsHasPackage ? 1 : 0;
 
         /// <summary>
         /// 包装描述

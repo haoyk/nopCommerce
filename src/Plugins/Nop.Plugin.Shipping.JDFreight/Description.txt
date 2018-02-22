@@ -1,0 +1,9 @@
+﻿Group: Shipping rate computation
+FriendlyName: 京东运费计算
+SystemName: Shipping.JDFreight
+Version: 1.0.0
+SupportedVersions: 3.90
+Author: 拉萨盛航电子商务有限公司
+DisplayOrder: 0
+FileName: Nop.Plugin.Shipping.JDFreight.dll
+Description: 京东运费计算

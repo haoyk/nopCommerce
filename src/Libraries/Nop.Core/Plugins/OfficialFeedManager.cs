@@ -8,13 +8,13 @@ using System.Xml;
 namespace Nop.Core.Plugins
 {
     /// <summary>
-    /// Official feed manager (official plugins from www.nopCommerce.com site)
+    /// Official feed manager (official plugins from www.meilianyougou.com site)
     /// </summary>
     public partial class OfficialFeedManager : IOfficialFeedManager
     {
         private static string MakeUrl(string query, params object[] args)
         {
-            var url = "http://www.nopcommerce.com/extensionsxml.aspx?" + query;
+            var url = "http://www.meilianyougou.com/extensionsxml.aspx?" + query;
 
             return string.Format(url, args);
         }

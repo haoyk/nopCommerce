@@ -706,5 +706,7 @@ namespace Nop.Core.Domain.Catalog
             get { return _productWarehouseInventory ?? (_productWarehouseInventory = new List<ProductWarehouseInventory>()); }
             protected set { _productWarehouseInventory = value; }
         }
+
+        public long? JDSkuId { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace Nop.Data.Mapping.Common
             this.ToTable("Address");
             this.HasKey(a => a.Id);
 
+            this.Ignore(p => p.FullName);
+
             this.HasOptional(a => a.Country)
                 .WithMany()
                 .HasForeignKey(a => a.CountryId).WillCascadeOnDelete(false);

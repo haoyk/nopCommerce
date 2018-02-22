@@ -83,7 +83,7 @@ namespace Nop.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageScheduleTasks))
                 return AccessDeniedKendoGridJson();
 
-            var models = _scheduleTaskService.GetAllTasks(true)
+            var models = _scheduleTaskService.GetAllTasks(true).OrderByDescending(p=>p.Enabled).ThenByDescending(p=>p.Id)
                 .Select(PrepareScheduleTaskModel)
                 .ToList();
             var gridModel = new DataSourceResult

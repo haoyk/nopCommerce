@@ -13,6 +13,8 @@ using Nop.Core.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
+using Nop.Services.JD;
+using Nop.Services.JD.DTO;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Orders;
@@ -48,7 +50,7 @@ namespace Nop.Web.Controllers
         private readonly ILogger _logger;
         private readonly IOrderService _orderService;
         private readonly IWebHelper _webHelper;
-        private readonly HttpContextBase _httpContext; 
+        private readonly HttpContextBase _httpContext;
         private readonly IAddressAttributeParser _addressAttributeParser;
         private readonly IAddressAttributeService _addressAttributeService;
 
@@ -59,21 +61,25 @@ namespace Nop.Web.Controllers
         private readonly AddressSettings _addressSettings;
         private readonly CustomerSettings _customerSettings;
 
+        private readonly IJDService _jdService;
+        private readonly IShipmentService _shipmentService;
+        private readonly ICustomerActivityService _customerActivityService;
+
         #endregion
 
-		#region Ctor
+        #region Ctor
 
         public CheckoutController(ICheckoutModelFactory checkoutModelFactory,
             IWorkContext workContext,
             IStoreContext storeContext,
-            IShoppingCartService shoppingCartService, 
-            ILocalizationService localizationService, 
+            IShoppingCartService shoppingCartService,
+            ILocalizationService localizationService,
             IOrderProcessingService orderProcessingService,
-            ICustomerService customerService, 
+            ICustomerService customerService,
             IGenericAttributeService genericAttributeService,
             ICountryService countryService,
             IStateProvinceService stateProvinceService,
-            IShippingService shippingService, 
+            IShippingService shippingService,
             IPaymentService paymentService,
             IPluginFinder pluginFinder,
             IOrderTotalCalculationService orderTotalCalculationService,
@@ -83,12 +89,15 @@ namespace Nop.Web.Controllers
             HttpContextBase httpContext,
             IAddressAttributeParser addressAttributeParser,
             IAddressAttributeService addressAttributeService,
-            OrderSettings orderSettings, 
+            OrderSettings orderSettings,
             RewardPointsSettings rewardPointsSettings,
             PaymentSettings paymentSettings,
             ShippingSettings shippingSettings,
             AddressSettings addressSettings,
-            CustomerSettings customerSettings)
+            CustomerSettings customerSettings,
+            IJDService jdService,
+            IShipmentService shipmentService,
+            ICustomerActivityService customerActivityService)
         {
             this._checkoutModelFactory = checkoutModelFactory;
             this._workContext = workContext;
@@ -117,6 +126,10 @@ namespace Nop.Web.Controllers
             this._shippingSettings = shippingSettings;
             this._addressSettings = addressSettings;
             this._customerSettings = customerSettings;
+
+            this._jdService = jdService;
+            _shipmentService = shipmentService;
+            _customerActivityService = customerActivityService;
         }
 
         #endregion
@@ -156,7 +169,7 @@ namespace Nop.Web.Controllers
             bool downloadableProductsRequireRegistration =
                 _customerSettings.RequireRegistrationForDownloadableProducts && cart.Any(sci => sci.Product.IsDownload);
 
-            if (_workContext.CurrentCustomer.IsGuest() 
+            if (_workContext.CurrentCustomer.IsGuest()
                 && (!_orderSettings.AnonymousCheckoutAllowed
                     || downloadableProductsRequireRegistration)
                 )
@@ -207,7 +220,7 @@ namespace Nop.Web.Controllers
 
             if (_orderSettings.OnePageCheckoutEnabled)
                 return RedirectToRoute("CheckoutOnePage");
-            
+
             return RedirectToRoute("CheckoutBillingAddress");
         }
 
@@ -237,7 +250,7 @@ namespace Nop.Web.Controllers
             //disable "order completed" page?
             if (_orderSettings.DisableOrderCompletedPage)
             {
-                return RedirectToRoute("OrderDetails", new {orderId = order.Id});
+                return RedirectToRoute("OrderDetails", new { orderId = order.Id });
             }
 
             //model
@@ -537,7 +550,7 @@ namespace Nop.Web.Controllers
                 overrideAttributesXml: customAttributes);
             return View(model);
         }
-        
+
         public virtual ActionResult ShippingMethod()
         {
             //validation
@@ -558,8 +571,8 @@ namespace Nop.Web.Controllers
             {
                 _genericAttributeService.SaveAttribute<ShippingOption>(_workContext.CurrentCustomer, SystemCustomerAttributeNames.SelectedShippingOption, null, _storeContext.CurrentStore.Id);
                 return RedirectToRoute("CheckoutPaymentMethod");
-                }
-            
+            }
+
             //model
             var model = _checkoutModelFactory.PrepareShippingMethodModel(cart, _workContext.CurrentCustomer.ShippingAddress);
 
@@ -567,11 +580,11 @@ namespace Nop.Web.Controllers
                 model.ShippingMethods.Count == 1)
             {
                 //if we have only one shipping method, then a customer doesn't have to choose a shipping method
-                _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, 
+                _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
                     SystemCustomerAttributeNames.SelectedShippingOption,
                     model.ShippingMethods.First().ShippingOption,
                     _storeContext.CurrentStore.Id);
-            
+
                 return RedirectToRoute("CheckoutPaymentMethod");
             }
 
@@ -607,12 +620,12 @@ namespace Nop.Web.Controllers
             //parse selected method 
             if (String.IsNullOrEmpty(shippingoption))
                 return ShippingMethod();
-            var splittedOption = shippingoption.Split(new [] { "___" }, StringSplitOptions.RemoveEmptyEntries);
+            var splittedOption = shippingoption.Split(new[] { "___" }, StringSplitOptions.RemoveEmptyEntries);
             if (splittedOption.Length != 2)
                 return ShippingMethod();
             string selectedName = splittedOption[0];
             string shippingRateComputationMethodSystemName = splittedOption[1];
-            
+
             //find it
             //performance optimization. try cache first
             var shippingOptions = _workContext.CurrentCustomer.GetAttribute<List<ShippingOption>>(SystemCustomerAttributeNames.OfferedShippingOptions, _storeContext.CurrentStore.Id);
@@ -636,10 +649,10 @@ namespace Nop.Web.Controllers
 
             //save
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer, SystemCustomerAttributeNames.SelectedShippingOption, shippingOption, _storeContext.CurrentStore.Id);
-            
+
             return RedirectToRoute("CheckoutPaymentMethod");
         }
-        
+
         public virtual ActionResult PaymentMethod()
         {
             //validation
@@ -685,7 +698,7 @@ namespace Nop.Web.Controllers
                 //so customer doesn't have to choose a payment method
 
                 _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
-                    SystemCustomerAttributeNames.SelectedPaymentMethod, 
+                    SystemCustomerAttributeNames.SelectedPaymentMethod,
                     paymentMethodModel.PaymentMethods[0].PaymentMethodSystemName,
                     _storeContext.CurrentStore.Id);
                 return RedirectToRoute("CheckoutPaymentInfo");
@@ -734,7 +747,7 @@ namespace Nop.Web.Controllers
                 return PaymentMethod();
 
             var paymentMethodInst = _paymentService.LoadPaymentMethodBySystemName(paymentmethod);
-            if (paymentMethodInst == null || 
+            if (paymentMethodInst == null ||
                 !paymentMethodInst.IsPaymentMethodActive(_paymentSettings) ||
                 !_pluginFinder.AuthenticateStore(paymentMethodInst.PluginDescriptor, _storeContext.CurrentStore.Id) ||
                 !_pluginFinder.AuthorizedForUser(paymentMethodInst.PluginDescriptor, _workContext.CurrentCustomer))
@@ -743,7 +756,7 @@ namespace Nop.Web.Controllers
             //save
             _genericAttributeService.SaveAttribute(_workContext.CurrentCustomer,
                 SystemCustomerAttributeNames.SelectedPaymentMethod, paymentmethod, _storeContext.CurrentStore.Id);
-            
+
             return RedirectToRoute("CheckoutPaymentInfo");
         }
 
@@ -779,7 +792,7 @@ namespace Nop.Web.Controllers
                 return RedirectToRoute("CheckoutPaymentMethod");
 
             //Check whether payment info should be skipped
-            if (paymentMethod.SkipPaymentInfo || 
+            if (paymentMethod.SkipPaymentInfo ||
                 (paymentMethod.PaymentMethodType == PaymentMethodType.Redirection && _paymentSettings.SkipPaymentInfoStepForRedirectionPaymentMethods))
             {
                 //skip payment info page
@@ -851,7 +864,7 @@ namespace Nop.Web.Controllers
             var model = _checkoutModelFactory.PreparePaymentInfoModel(paymentMethod);
             return View(model);
         }
-        
+
         public virtual ActionResult Confirm()
         {
             //validation
@@ -902,10 +915,10 @@ namespace Nop.Web.Controllers
                     //Check whether payment workflow is required
                     if (_orderProcessingService.IsPaymentWorkflowRequired(cart))
                         return RedirectToRoute("CheckoutPaymentInfo");
-                    
+
                     processPaymentRequest = new ProcessPaymentRequest();
                 }
-                
+
                 //prevent 2 orders being placed within an X seconds time frame
                 if (!IsMinimumOrderPlacementIntervalValid(_workContext.CurrentCustomer))
                     throw new Exception(_localizationService.GetResource("Checkout.MinOrderPlacementInterval"));
@@ -931,10 +944,10 @@ namespace Nop.Web.Controllers
                         //redirection or POST has been done in PostProcessPayment
                         return Content("Redirected");
                     }
-                    
+
                     return RedirectToRoute("CheckoutCompleted", new { orderId = placeOrderResult.PlacedOrder.Id });
                 }
-                
+
                 foreach (var error in placeOrderResult.Errors)
                     model.Warnings.Add(error);
             }
@@ -1028,7 +1041,7 @@ namespace Nop.Web.Controllers
 
                     return OpcLoadStepAfterPaymentMethod(paymentMethodInst, cart);
                 }
-                
+
                 //customer have to choose a payment method
                 return Json(new
                 {
@@ -1436,7 +1449,7 @@ namespace Nop.Web.Controllers
 
                 if (_workContext.CurrentCustomer.IsGuest() && !_orderSettings.AnonymousCheckoutAllowed)
                     throw new Exception("Anonymous checkout is not allowed");
-                
+
                 if (!cart.RequiresShipping())
                     throw new Exception("Shipping is not required");
 
@@ -1444,19 +1457,19 @@ namespace Nop.Web.Controllers
                 string shippingoption = form["shippingoption"];
                 if (String.IsNullOrEmpty(shippingoption))
                     throw new Exception("Selected shipping method can't be parsed");
-                var splittedOption = shippingoption.Split(new [] { "___" }, StringSplitOptions.RemoveEmptyEntries);
+                var splittedOption = shippingoption.Split(new[] { "___" }, StringSplitOptions.RemoveEmptyEntries);
                 if (splittedOption.Length != 2)
                     throw new Exception("Selected shipping method can't be parsed");
                 string selectedName = splittedOption[0];
                 string shippingRateComputationMethodSystemName = splittedOption[1];
-                
+
                 //find it
                 //performance optimization. try cache first
                 var shippingOptions = _workContext.CurrentCustomer.GetAttribute<List<ShippingOption>>(SystemCustomerAttributeNames.OfferedShippingOptions, _storeContext.CurrentStore.Id);
                 if (shippingOptions == null || !shippingOptions.Any())
                 {
                     //not found? let's load them using shipping service
-                    shippingOptions = _shippingService.GetShippingOptions(cart, _workContext.CurrentCustomer.ShippingAddress, 
+                    shippingOptions = _shippingService.GetShippingOptions(cart, _workContext.CurrentCustomer.ShippingAddress,
                         _workContext.CurrentCustomer, shippingRateComputationMethodSystemName, _storeContext.CurrentStore.Id).ShippingOptions.ToList();
                 }
                 else
@@ -1465,7 +1478,7 @@ namespace Nop.Web.Controllers
                     shippingOptions = shippingOptions.Where(so => so.ShippingRateComputationMethodSystemName.Equals(shippingRateComputationMethodSystemName, StringComparison.InvariantCultureIgnoreCase))
                         .ToList();
                 }
-                
+
                 var shippingOption = shippingOptions
                     .Find(so => !String.IsNullOrEmpty(so.Name) && so.Name.Equals(selectedName, StringComparison.InvariantCultureIgnoreCase));
                 if (shippingOption == null)
@@ -1654,6 +1667,7 @@ namespace Nop.Web.Controllers
                 if (!IsMinimumOrderPlacementIntervalValid(_workContext.CurrentCustomer))
                     throw new Exception(_localizationService.GetResource("Checkout.MinOrderPlacementInterval"));
 
+
                 //place order
                 var processPaymentRequest = _httpContext.Session["OrderPaymentInfo"] as ProcessPaymentRequest;
                 if (processPaymentRequest == null)
@@ -1672,6 +1686,9 @@ namespace Nop.Web.Controllers
                 processPaymentRequest.PaymentMethodSystemName = _workContext.CurrentCustomer.GetAttribute<string>(
                     SystemCustomerAttributeNames.SelectedPaymentMethod,
                     _genericAttributeService, _storeContext.CurrentStore.Id);
+
+                //将购物车详细添加到请求参数中
+                processPaymentRequest.ShoppingCartItems = cart;
                 var placeOrderResult = _orderProcessingService.PlaceOrder(processPaymentRequest);
                 if (placeOrderResult.Success)
                 {
@@ -1680,7 +1697,6 @@ namespace Nop.Web.Controllers
                     {
                         Order = placeOrderResult.PlacedOrder
                     };
-
 
                     var paymentMethod = _paymentService.LoadPaymentMethodBySystemName(placeOrderResult.PlacedOrder.PaymentMethodSystemName);
                     if (paymentMethod == null)
@@ -1700,16 +1716,67 @@ namespace Nop.Web.Controllers
                         });
                     }
 
-                    _paymentService.PostProcessPayment(postProcessPaymentRequest);
+                    int paymentCompanyId = (int)processPaymentRequest.CustomValues["selectPaymentCompanyId"];
+                    (paymentCompanyId <= 0).TrueThrow("没有获取到支付发薪公司编码");
+
+                    //订单中全部商品都为京东商品
+                    bool allJdProduct = placeOrderResult.PlacedOrder.OrderItems.All(p => p.Product.JDSkuId.HasValue);
+
+                    string jdOrderId = string.Empty;
+                    if (allJdProduct)
+                    {
+                        //先提求京东订单
+                        jdOrderId = JDSubmitOrder(paymentCompanyId, placeOrderResult);
+                    }
+
+                    if (allJdProduct == false && placeOrderResult.PlacedOrder.OrderItems.Any(p => p.Product.JDSkuId.HasValue))
+                        throw new NopException("订单中包含京东商品但不全是京东商品!");
+
+                    bool paySuccess = true;
+                    try
+                    {
+                        //发起支付
+                        _paymentService.PostProcessPayment(postProcessPaymentRequest);
+                    }
+                    catch (Exception e)
+                    {
+                        paySuccess = false;
+                    }
+
+                    //都为京东商品
+                    if (allJdProduct)
+                    {
+                        //支付成功确认订单
+                        if (paySuccess)
+                        {
+                            var nopOrder = _orderService.GetOrderById(placeOrderResult.PlacedOrder.Id);
+                            nopOrder.JdOrderId = jdOrderId;
+                            nopOrder.PaymentCompanyId = paymentCompanyId;
+                            _orderService.UpdateOrder(nopOrder);
+
+                            ////京东确认订单
+                            //var confirmResult = _jdService.ConfirmOrder(paymentCompanyId, jdResult.JDOrderId);
+                            //(!confirmResult.Success).TrueThrow(confirmResult.ResultMessage);
+
+                            //京东自动置为发货状态
+                            SetAsShipped(jdOrderId, placeOrderResult);
+                        }
+                        else
+                        {
+                            //支付失败，取消订单
+                            _jdService.CancelOrder(paymentCompanyId, jdOrderId);
+                        }
+                    }
+
                     //success
-                    return Json(new {success = 1});
+                    return Json(new { success = 1 });
                 }
-                
+
                 //error
                 var confirmOrderModel = new CheckoutConfirmModel();
                 foreach (var error in placeOrderResult.Errors)
-                    confirmOrderModel.Warnings.Add(error); 
-                    
+                    confirmOrderModel.Warnings.Add(error);
+
                 return Json(new
                 {
                     update_section = new UpdateSectionJsonModel
@@ -1745,7 +1812,7 @@ namespace Nop.Web.Controllers
                 if (order == null)
                     return RedirectToRoute("HomePage");
 
-                
+
                 var paymentMethod = _paymentService.LoadPaymentMethodBySystemName(order.PaymentMethodSystemName);
                 if (paymentMethod == null)
                     return RedirectToRoute("HomePage");
@@ -1771,7 +1838,7 @@ namespace Nop.Web.Controllers
                     //redirection or POST has been done in PostProcessPayment
                     return Content("Redirected");
                 }
-                
+
                 //if no redirection has been done (to a third-party payment page)
                 //theoretically it's not possible
                 return RedirectToRoute("CheckoutCompleted", new { orderId = order.Id });
@@ -1781,6 +1848,91 @@ namespace Nop.Web.Controllers
                 _logger.Warning(exc.Message, exc, _workContext.CurrentCustomer);
                 return Content(exc.Message);
             }
+        }
+
+
+        #endregion
+
+        #region PrivateMethod
+
+        [NonAction]
+        protected virtual void LogEditOrder(int orderId)
+        {
+            var order = _orderService.GetOrderById(orderId);
+
+            _customerActivityService.InsertActivity("EditOrder", _localizationService.GetResource("ActivityLog.EditOrder"), order.CustomOrderNumber);
+        }
+
+        private string JDSubmitOrder(int paymentCompanyId, PlaceOrderResult placeOrderResult)
+        {
+            //京东订单
+            if (placeOrderResult.PlacedOrder.OrderItems.All(p => p.Product.JDSkuId.HasValue))
+            {
+                //京东提交订单
+                var jdResult = _jdService.SubmitOrder(new JDSubmitOrderIn()
+                {
+                    PaymentCompanyId = paymentCompanyId,
+                    NopOrderId = placeOrderResult.PlacedOrder.Id.ToString(),
+                    ReceiverName = placeOrderResult.PlacedOrder.ShippingAddress.FullName,
+                    JDProvince = placeOrderResult.PlacedOrder.ShippingAddress.JDAddrLevel1,
+                    JDCity = placeOrderResult.PlacedOrder.ShippingAddress.JDAddrLevel2,
+                    JDCounty = placeOrderResult.PlacedOrder.ShippingAddress.JDAddrLevel3,
+                    JDTown = placeOrderResult.PlacedOrder.ShippingAddress.JDAddrLevel4,
+                    Address = placeOrderResult.PlacedOrder.ShippingAddress.Address1,
+                    Mobile = placeOrderResult.PlacedOrder.ShippingAddress.PhoneNumber,
+                    Email = placeOrderResult.PlacedOrder.ShippingAddress.Email,
+                    Remark = "还没取到",
+                    OrderPriceSnap = placeOrderResult.PlacedOrder.OrderItems.Select(p => new JDSubmitOrderIn_PriceSnap()
+                    {
+                        SkuId = p.Product.JDSkuId.Value,
+                        PriceSnap = p.Product.Price
+                    }).ToList(),
+                    Skus = placeOrderResult.PlacedOrder.OrderItems.Select(p => new JDSubmitOrderIn_Sku()
+                    {
+                        JDSkuId = p.Product.JDSkuId.Value,
+                        Num = p.Quantity
+                    }).ToList()
+                });
+                //考虑用友好的方式返回错误信息
+                (!jdResult.Success).TrueThrow(jdResult.ResultMessage);
+
+                return jdResult.JDOrderId;
+            }
+
+            return null;
+        }
+
+        private void SetAsShipped(string jdOrderId, PlaceOrderResult placeOrderResult)
+        {
+            var shipment = new Shipment
+            {
+                OrderId = placeOrderResult.PlacedOrder.Id,
+                TrackingNumber = jdOrderId,
+                TotalWeight = 0,
+                ShippedDateUtc = null,
+                DeliveryDateUtc = null,
+                AdminComment = "京东自动发货",
+                CreatedOnUtc = DateTime.UtcNow
+            };
+
+            placeOrderResult.PlacedOrder.OrderItems.ToList().ForEach(item =>
+            {
+                var shipmentItem = new ShipmentItem
+                {
+                    OrderItemId = item.Id,
+                    Quantity = item.Quantity,
+                    WarehouseId = item.Product.WarehouseId
+                };
+                shipment.ShipmentItems.Add(shipmentItem);
+
+                shipment.TotalWeight += item.Product.Weight;
+            });
+
+            _shipmentService.InsertShipment(shipment);
+
+            //置为已发货
+            _orderProcessingService.Ship(shipment, true);
+            LogEditOrder(shipment.OrderId);
         }
 
         #endregion

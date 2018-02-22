@@ -39,6 +39,7 @@
 
     //scripts
     Html.AppendScriptParts(string.Format("~/Administration/Scripts/kendo/{0}/kendo.web.min.js", kendoVersion));
+    Html.AppendScriptParts(string.Format("~/Administration/Scripts/kendo/{0}/cultures/kendo.culture.zh-CN.min.js", kendoVersion));
     Html.AppendScriptParts("~/Administration/Scripts/admin.search.js");
     Html.AppendScriptParts("~/Administration/scripts/admin.navigation.js");
     Html.AppendScriptParts("~/Administration/Scripts/admin.common.js");
@@ -74,7 +75,7 @@
     //avatar
     var currentCustomer = EngineContext.Current.Resolve<IWorkContext>().CurrentCustomer;
 
-    //info: we specify "Admin" area for actions and widgets here for cases when we use this layout in a plugin that is running in a different area than "admin"
+    //info: we specify "Admin" area for actions and widgets here for cases when we use this layout in a plugin that is running in a different area than "admin"  
 }
 
 <!DOCTYPE html>
@@ -86,6 +87,9 @@
         @Html.NopHeadCustom()
         @Html.NopCssFiles(this.Url, ResourceLocation.Head, false)
         @Html.NopScripts(this.Url, ResourceLocation.Head, false)
+        <script>
+            kendo.culture("zh-CN");
+        </script>
     </head>
     <body class="hold-transition skin-blue sidebar-mini @if (hideSidebar)
                                                     {<text>sidebar-collapse</text>}">
@@ -225,13 +229,13 @@
                 @if (!EngineContext.Current.Resolve<StoreInformationSettings>().HidePoweredByNopCommerce)
                 {
                     @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
-                        Please find more info at http://www.nopcommerce.com/copyrightremoval.aspx*@
+                        Please find more info at http://www.meilianyougou.com/copyrightremoval.aspx*@
                     <div class="pull-left">
-                        Powered by <a href="http://www.nopcommerce.com/?utm_source=admin-panel&utm_medium=footer&utm_campaign=admin-panel" target="_blank">nopCommerce</a>
+                        Powered by <a href="http://www.meilianyougou.com/?utm_source=admin-panel&utm_medium=footer&utm_campaign=admin-panel" target="_blank">nopCommerce</a>
                     </div>
                 }
                 <div class="pull-right hidden-xs">
-                    <b>nopCommerce version @NopVersion.CurrentVersion</b>
+                    <b>Version @NopVersion.CurrentVersion</b>
                 </div>
                 <div class="text-center">
                     @{

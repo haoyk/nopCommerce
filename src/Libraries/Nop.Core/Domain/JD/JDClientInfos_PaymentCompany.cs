@@ -23,6 +23,11 @@ namespace Nop.Core.Domain.JD
         public int PaymentComId { get; set; }
 
         /// <summary>
+        /// 发票抬头
+        /// </summary>
+        public string CompanyInvoiceTitle { get; set; }
+
+        /// <summary>
         /// 京东Clint信息表主键
         /// </summary>
         public int JDClientInfoId { get; set; }

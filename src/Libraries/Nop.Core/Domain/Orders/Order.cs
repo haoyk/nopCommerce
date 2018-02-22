@@ -340,6 +340,16 @@ namespace Nop.Core.Domain.Orders
         /// </summary>
         public string CustomOrderNumber { get; set; }
 
+        /// <summary>
+        /// 京东订单编码
+        /// </summary>
+        public string JdOrderId { get; set; }
+
+        /// <summary>
+        /// 支付时，发薪公司编码
+        /// </summary>
+        public int? PaymentCompanyId { get; set; }
+
         #endregion
 
         #region Navigation properties

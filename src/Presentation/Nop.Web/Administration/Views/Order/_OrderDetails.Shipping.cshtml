@@ -231,56 +231,103 @@
                         @Html.NopLabelFor(model => model.ShippingMethod)
                     </div>
                     <div class="col-md-9">
-                        @if (!Model.IsLoggedInAsVendor)
-                        {
-                            <script type="text/javascript">
-                                $(document).ready(function () {
-                                    toggleEditShippingMethod(false);
-                                });
 
-                                function toggleEditShippingMethod(editmode) {
-                                    if (editmode) {
-                                        $('#lblShippingMethod').hide();
-                                        $('#divShippingMethod').show();
-                                        $('#btnEditShippingMethod').hide();
-                                        $('#btnSaveShippingMethod').show();
-                                        $('#btnCancelShippingMethod').show();
-                                    } else {
-                                        $('#lblShippingMethod').show();
-                                        $('#divShippingMethod').hide();
-                                        $('#btnEditShippingMethod').show();
-                                        $('#btnSaveShippingMethod').hide();
-                                        $('#btnCancelShippingMethod').hide();
-                                    }
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                toggleEditShippingMethod(false);
+                            });
+
+                            function toggleEditShippingMethod(editmode) {
+                                if (editmode) {
+                                    $('#lblShippingMethod').hide();
+                                    $('#divShippingMethod').show();
+                                    $('#btnEditShippingMethod').hide();
+                                    $('#btnSaveShippingMethod').show();
+                                    $('#btnCancelShippingMethod').show();
+                                } else {
+                                    $('#lblShippingMethod').show();
+                                    $('#divShippingMethod').hide();
+                                    $('#btnEditShippingMethod').show();
+                                    $('#btnSaveShippingMethod').hide();
+                                    $('#btnCancelShippingMethod').hide();
                                 }
-                            </script>
-                            <div class="input-group input-group-short">
-                                <div id="lblShippingMethod" class="input-group-text">
-                                    @Html.NopDisplayFor(model => model.ShippingMethod)
-                                </div>
-                                <div id="divShippingMethod">@Html.NopEditorFor(model => model.ShippingMethod)</div>
-                                <span class="input-group-btn">
-                                    <button type="submit" onclick="toggleEditShippingMethod(true);return false;" id="btnEditShippingMethod" class="btn btn-primary">
-                                        @T("Admin.Common.Edit")
-                                    </button>
-
-                                    <button type="submit" id="btnSaveShippingMethod" name="save-shipping-method" class="btn btn-primary">
-                                        @T("Admin.Common.Save")
-                                    </button>
-                                    @Html.ActionConfirmation("btnSaveShippingMethod")
-
-                                    <button type="submit" onclick="toggleEditShippingMethod(false);return false;" id="btnCancelShippingMethod" class="btn bg-teal">
-                                        @T("Admin.Common.Cancel")
-                                    </button>
-                                </span>
-                            </div>
-                        }
-                        else
-                        {
-                            <div id="lblShippingMethod">
+                            }
+                        </script>
+                        <div class="input-group input-group-short">
+                            <div id="lblShippingMethod" class="input-group-text">
                                 @Html.NopDisplayFor(model => model.ShippingMethod)
                             </div>
-                        }
+                            <div id="divShippingMethod">@Html.NopEditorFor(model => model.ShippingMethod)</div>
+                            <span class="input-group-btn">
+                                <button type="submit" onclick="toggleEditShippingMethod(true);return false;" id="btnEditShippingMethod" class="btn btn-primary">
+                                    @T("Admin.Common.Edit")
+                                </button>
+
+                                <button type="submit" id="btnSaveShippingMethod" name="save-shipping-method" class="btn btn-primary">
+                                    @T("Admin.Common.Save")
+                                </button>
+                                @Html.ActionConfirmation("btnSaveShippingMethod")
+
+                                <button type="submit" onclick="toggleEditShippingMethod(false);return false;" id="btnCancelShippingMethod" class="btn bg-teal">
+                                    @T("Admin.Common.Cancel")
+                                </button>
+                            </span>
+                        </div>
+
+                        <div id="lblShippingMethod">
+                            @Html.NopDisplayFor(model => model.ShippingMethod)
+                        </div>
+
+                        @*@if (!Model.IsLoggedInAsVendor)
+                            {
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        toggleEditShippingMethod(false);
+                                    });
+
+                                    function toggleEditShippingMethod(editmode) {
+                                        if (editmode) {
+                                            $('#lblShippingMethod').hide();
+                                            $('#divShippingMethod').show();
+                                            $('#btnEditShippingMethod').hide();
+                                            $('#btnSaveShippingMethod').show();
+                                            $('#btnCancelShippingMethod').show();
+                                        } else {
+                                            $('#lblShippingMethod').show();
+                                            $('#divShippingMethod').hide();
+                                            $('#btnEditShippingMethod').show();
+                                            $('#btnSaveShippingMethod').hide();
+                                            $('#btnCancelShippingMethod').hide();
+                                        }
+                                    }
+                                </script>
+                                <div class="input-group input-group-short">
+                                    <div id="lblShippingMethod" class="input-group-text">
+                                        @Html.NopDisplayFor(model => model.ShippingMethod)
+                                    </div>
+                                    <div id="divShippingMethod">@Html.NopEditorFor(model => model.ShippingMethod)</div>
+                                    <span class="input-group-btn">
+                                        <button type="submit" onclick="toggleEditShippingMethod(true);return false;" id="btnEditShippingMethod" class="btn btn-primary">
+                                            @T("Admin.Common.Edit")
+                                        </button>
+
+                                        <button type="submit" id="btnSaveShippingMethod" name="save-shipping-method" class="btn btn-primary">
+                                            @T("Admin.Common.Save")
+                                        </button>
+                                        @Html.ActionConfirmation("btnSaveShippingMethod")
+
+                                        <button type="submit" onclick="toggleEditShippingMethod(false);return false;" id="btnCancelShippingMethod" class="btn bg-teal">
+                                            @T("Admin.Common.Cancel")
+                                        </button>
+                                    </span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="lblShippingMethod">
+                                    @Html.NopDisplayFor(model => model.ShippingMethod)
+                                </div>
+                            }*@
                     </div>
                 </div>
 
@@ -364,13 +411,13 @@
                                     title: "@T("Admin.Orders.Shipments.ShippedDate")",
                                     width: 200,
                                     type: "date",
-                                    format: "{0:G}"
+                                    format: "{0:yyyy-MM-dd HH:mm:ss}"
                                 }, {
                                     field: "DeliveryDate",
                                     title: "@T("Admin.Orders.Shipments.DeliveryDate")",
                                     width: 200,
                                     type: "date",
-                                    format: "{0:G}"
+                                    format: "{0:yyyy-MM-dd HH:mm:ss}"
                                 }, {
                                     field: "Id",
                                     title: "@T("Admin.Common.View")",

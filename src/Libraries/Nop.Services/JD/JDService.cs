@@ -521,7 +521,7 @@ namespace Nop.Services.JD
             JDSubmitOrderOut result = null;
             var token = GetJdToken(order.PaymentCompanyId);
             token.NullCheck("token");
-
+            
             string str = CallApi("https://bizapi.jd.com/api/order/submitOrder",
                 $"token={token.Access_Token}&{order.ToRequestUrlParam()}");
 

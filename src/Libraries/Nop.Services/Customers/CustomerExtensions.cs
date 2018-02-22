@@ -29,14 +29,14 @@ namespace Nop.Services.Customers
 
             string fullName = "";
             if (!String.IsNullOrWhiteSpace(firstName) && !String.IsNullOrWhiteSpace(lastName))
-                fullName = string.Format("{0} {1}", firstName, lastName);
+                fullName = string.Format("{0}{1}", lastName, firstName);
             else
             {
-                if (!String.IsNullOrWhiteSpace(firstName))
-                    fullName = firstName;
-
                 if (!String.IsNullOrWhiteSpace(lastName))
                     fullName = lastName;
+
+                if (!String.IsNullOrWhiteSpace(firstName))
+                    fullName = firstName;
             }
             return fullName;
         }

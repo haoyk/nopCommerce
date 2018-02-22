@@ -15,6 +15,8 @@ namespace Nop.Core.Domain.Common
         /// </summary>
         public string LastName { get; set; }
 
+        public string FullName => $"{LastName}{FirstName}";
+
         /// <summary>
         /// Gets or sets the email
         /// </summary>

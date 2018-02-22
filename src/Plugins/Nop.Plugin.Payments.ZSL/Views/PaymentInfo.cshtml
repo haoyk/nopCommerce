@@ -1,0 +1,18 @@
+﻿@{
+    Layout = "";
+}
+@using Nop.Plugin.Payments.ZSL.Models
+@model PaymentInfoModel
+
+<p><b>@T("Plugins.Payments.ZSL.Fields.RedirectionTip")</b></p>
+
+<table width="100%" cellspacing="2" cellpadding="1" border="0">
+    <tr>
+        @foreach (PaymentInfoModel_Item item in Model.PaymentInfos)
+        {
+            <td>
+                <input type="checkbox" /> @item.PaymentCompanyName (@item.Amount)
+            </td>
+        }
+    </tr>
+</table>

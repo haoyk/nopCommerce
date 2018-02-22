@@ -22,6 +22,8 @@ namespace Nop.Data.Mapping.Orders
             this.Property(o => o.OrderTotal).HasPrecision(18, 4);
             this.Property(o => o.RefundedAmount).HasPrecision(18, 4);
             this.Property(o => o.CustomOrderNumber).IsRequired();
+            this.Property(p => p.JdOrderId).HasMaxLength(25);
+            this.Property(p => p.PaymentCompanyId).IsOptional();
 
             this.Ignore(o => o.OrderStatus);
             this.Ignore(o => o.PaymentStatus);
@@ -33,7 +35,7 @@ namespace Nop.Data.Mapping.Orders
                 .WithMany()
                 .HasForeignKey(o => o.CustomerId);
             
-            //code below is commented because it causes some issues on big databases - http://www.nopcommerce.com/boards/t/11126/bug-version-20-command-confirm-takes-several-minutes-using-big-databases.aspx
+            //code below is commented because it causes some issues on big databases - http://www.meilianyougou.com/boards/t/11126/bug-version-20-command-confirm-takes-several-minutes-using-big-databases.aspx
             //this.HasRequired(o => o.BillingAddress).WithOptional().Map(x => x.MapKey("BillingAddressId")).WillCascadeOnDelete(false);
             //this.HasOptional(o => o.ShippingAddress).WithOptionalDependent().Map(x => x.MapKey("ShippingAddressId")).WillCascadeOnDelete(false);
             this.HasRequired(o => o.BillingAddress)

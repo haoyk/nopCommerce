@@ -76,7 +76,7 @@ namespace Nop.Admin.Controllers
         {
             try
             {
-                string feedUrl = string.Format("http://www.nopCommerce.com/NewsRSS.aspx?Version={0}&Localhost={1}&HideAdvertisements={2}&StoreURL={3}",
+                string feedUrl = string.Format("http://www.meilianyougou.com/NewsRSS.aspx?Version={0}&Localhost={1}&HideAdvertisements={2}&StoreURL={3}",
                     NopVersion.CurrentVersion, 
                     Request.Url.IsLoopback,
                     _adminAreaSettings.HideAdvertisementsOnAdminArea,

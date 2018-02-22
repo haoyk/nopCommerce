@@ -331,6 +331,11 @@
     <Compile Include="JD\Model\JDSubmitOrderResult.cs" />
     <Compile Include="JD\Model\JDTokenResult.cs" />
     <Compile Include="JD\Model\JDSkuAreaLimitResult.cs" />
+    <Compile Include="JD\RegJDTask.cs" />
+    <Compile Include="JD\Task\IJDTask.cs" />
+    <Compile Include="JD\Task\JDAutoDeliveredTask.cs" />
+    <Compile Include="JD\Task\JDFetchSplitOrderTask.cs" />
+    <Compile Include="JD\Task\JDUpdatePriceTask.cs" />
     <Compile Include="Logging\ClearLogTask.cs" />
     <Compile Include="Media\AzurePictureService.cs" />
     <Compile Include="Media\ResizeType.cs" />

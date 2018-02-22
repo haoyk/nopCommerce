@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Nop.Admin.Models.Common;
@@ -222,6 +223,9 @@ namespace Nop.Admin.Models.Orders
         public decimal AmountToRefund { get; set; }
         public decimal MaxAmountToRefund { get; set; }
         public string PrimaryStoreCurrencyCode { get; set; }
+
+        [DisplayName("京东订单号")]
+        public string JDOrderId { get; set; }
 
         //workflow info
         public bool CanCancelOrder { get; set; }

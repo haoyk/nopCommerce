@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Nop.Core;
+using Nop.Core.Data;
+using Nop.Core.Domain.JD;
+using Nop.Core.Infrastructure;
 
 namespace Nop.Services.JD.DTO
 {
@@ -73,10 +76,26 @@ namespace Nop.Services.JD.DTO
         /// </summary>
         public int SelectedInvoiceTitle => 5;
 
+        private string _CompanyName;
         /// <summary>
         /// 发票抬头
         /// </summary>
-        public string CompanyName { get; set; }
+        public string CompanyName
+        {
+            get
+            {
+                if (_CompanyName == null)
+                {
+                    var _jdClient_PayComReq = EngineContext.Current.Resolve<IRepository<JDClientInfos_PaymentCompany>>();
+
+                    var invoiceOjb = _jdClient_PayComReq.TableNoTracking.FirstOrDefault(p => p.PaymentComId == this.PaymentCompanyId);
+
+                    _CompanyName = invoiceOjb?.CompanyInvoiceTitle;
+                    _CompanyName.IsNullOrEmpty().TrueThrow("无法获取发薪公司抬头");
+                }
+                return _CompanyName;
+            }
+        }
 
         /// <summary>
         /// 1:明细，3：电脑配件，19:耗材，22：办公用品
